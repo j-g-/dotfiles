@@ -1,0 +1,87 @@
+"General opts -->
+filetype plugin on
+filetype indent on
+execute pathogen#infect()
+color gruvbox
+set background=dark 
+set autoindent 
+set nocompatible
+set grepprg=grep\ -nH\ $*
+set foldmethod=indent
+set cc=79
+hi ColorColumn ctermbg=blue
+set modeline
+let mapleader="ç""
+set number
+set hlsearch
+set cursorline
+set incsearch
+nnoremap <leader>t :tabnext<CR>
+nnoremap <leader>p :tabprevious<CR>
+"Toggle background font rendering style
+map <leader>bl :set background=light<CR>
+map <leader>bd :set background=dark<CR>
+
+"when mouse is present -->
+if has("mouse")
+	set mouse=a
+endif
+"<<<
+"<<<
+
+"Latex suite opts -->
+let g:tex_flavor='latex'
+set tags=tags
+"<<<
+
+"Set <tab> to use spaces instead of tabs, and to use 4 spaces, not 8 -->
+set shiftwidth=4
+set tabstop=4
+set expandtab 
+"<<<
+
+"TagList Options -->
+" Toggle map
+nnoremap <silent> <F8> :TlistToggle<CR>
+" Use right side of the window
+let Tlist_Use_Right_Window=1
+"<<<
+
+"NERDTree -->
+nnoremap <silent> <F2> :NERDTreeToggle<CR>
+"<<<
+
+"OmniCompleteb confs -->
+imap <C-b> <C-x><C-o>
+"<<<
+
+"java -->
+setlocal omnifunc=javacomplete#AddSourcePath('$HOME/.java')
+setlocal omnifunc=javacomplete#SetSourcePath('$HOME/.java')
+setlocal completefunc=javacomplete#CompleteParamsInfo
+autocmd FileType java set omnifunc=javacomplete#Complete
+"inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
+inoremap <c-space> <c-x><c-o><c-p> 
+"other
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType cpp se omnifunc=omnicppcomplete#Complete
+"<<<
+
+"Highlighting -->
+syntax on
+"<<<
+
+"AutoClose plugin --->
+nmap <Leader>ñ <Plug>ToggleAutoCloseMappings"
+"<<<
+
+"Git -->
+nnoremap <silent> <F4> :Gitv<CR>
+"<<<
+
+" FuzzyFinder binds -->
+map <leader>ff :FufFile <cr>
+map <leader>fl :FufLine <cr>
+"<<<
+
+" vim:set et  sw=4 ts=4 sts=2 fdm=marker foldmarker=-->,<<<:

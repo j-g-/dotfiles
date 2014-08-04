@@ -1,0 +1,16 @@
+https://github.com/vim-scripts/FuzzyFinder.git
+https://github.com/vim-scripts/L9.git
+https://github.com/vim-scripts/OmniCppComplete
+https://github.com/mattn/emmet-vim.git
+https://github.com/gregsexton/gitv.git
+https://github.com/morhetz/gruvbox.git
+https://github.com/vim-scripts/javacomplete.git
+https://github.com/scrooloose/nerdcommenter.git
+https://github.com/scrooloose/nerdtree
+https://github.com/vim-scripts/taglist.vim
+https://github.com/tomtom/tlib_vim.git
+https://github.com/MarcWeber/vim-addon-mw-utils.git
+https://github.com/tpope/vim-fugitive.git
+https://github.com/garbas/vim-snipmate.git
+https://github.com/honza/vim-snippets.git
+https://github.com/tpope/vim-surround.git

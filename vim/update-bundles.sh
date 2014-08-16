@@ -4,7 +4,6 @@ BLIST="${PWD}/bundle-list.txt"
 # Checking for list of bundles url to exist
 [ -e $BLIST ] || touch $BLIST
 
-echo "Bundle Updater v${VERSION}"
 
 # This functions adds the url of the origin of a bundle git repository
 add_tolist(){ 
@@ -25,12 +24,12 @@ for dir in ./*/ ; do
     printf "\t>>> Running 'git fetch' in $PWD\n"
     ORIGIN_URL=$(git remote show origin | grep Fetch | cut -c 14-) 
     echo "descargando desde $ORIGIN_URL"
-    git fetch &&\
-    printf "\t>>> Fetch successful\n"
-    cd ..;
+    git fetch &&  printf "\t>>> Fetch successful\n"
+    cd .. ;
     n=$((n+1))
+
+    # Add to $BLIST if it's not there
     grep -q $ORIGIN_URL $BLIST ||  add_tolist $ORIGIN_URL $dir
-    
 done
 
 

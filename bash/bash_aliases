@@ -1,0 +1,10 @@
+alias dia="dia --integrated"
+alias vbox='VirtualBox'
+alias vbmanage='VBoxManage'
+alias vbrdp='VBoxVRDP'
+#alias Sm='echo mem | sudo tee /sys/power/state'
+alias Sm='sudo systemctl suspend'
+alias vmlist='VBoxManage list vms'
+alias emfetch='sudo tail -f /var/log/emerge-fetch.log'
+alias su='sudo su'
+# vim:set ft=sh :

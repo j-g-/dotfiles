@@ -1,0 +1,44 @@
+# Colors
+CNone="\e[0m"
+CDark="\e[30m"
+CRed="\e[31m"
+CGreen="\e[32m"
+CYellow="\e[33m"
+CBlue="\e[34m"
+CMagenta="\e[35m"
+CAqua="\e[36m"
+CWhite="\e[37m"
+
+# Reverse Video Colors
+RVDark="\e[40m"
+RVRed="\e[41m"
+RVGreen="\e[42m"
+RVYelow="\e[43m"
+RVBlue="\e[44m"
+RVMagenta="\e[45m"
+RVAqua="\e[46m"
+RVWhite="\e[47m"
+
+# Prompt Colors
+PCNone="\[\e[0m\]"
+PCDark="\[\e[30m\]"
+PCRed="\[\e[31m\]"
+PCGreen="\[\e[32m\]"
+PCYellow="\[\e[33m\]"
+PCBlue="\[\e[34m\]"
+PCMagenta="\[\e[35m\]"
+PCAqua="\[\e[36m\]"
+PCWhite="\[\e[37m\]"
+
+# Prompt Reverse Video Colors
+PRVDark="\[\e[40m\]"
+PRVRed="\[\e[41m\]"
+PRVGreen="\[\e[42m\]"
+PRVYelow="\[\e[43m\]"
+PRVBlue="\[\e[44m\]"
+PRVMagenta="\[\e[45m\]"
+PRVAqua="\[\e[46m\]"
+PRVWhite="\[\e[47m\]"
+
+export BASH_COLORS=true
+# vim: set ft=sh:

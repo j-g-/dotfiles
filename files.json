@@ -1,0 +1,30 @@
+{
+    "vim" : {
+        "vimrc" : ".vimrc",
+        "update-bundles.sh" : ".vim/bundle/update-bundles.sh",
+        "bundle-list.txt" : ".vim/bundle/bundle-list.txt"
+    },
+    "tmux" : {
+        "tmux.conf" : ".tmux.conf"
+    },
+    "awesome" : {
+        "rc.lua" : ".config/awesome/rc.lua"
+    },
+    "bash" : {
+        "bash_aliases" : ".bash_aliases",
+        "bash_colors" : ".bash_colors",
+        "bashrc" : ".bashrc"
+    },
+
+    "python" : {
+        "pythonrc.py" : ".pythonrc.py"
+    },
+
+    "readline" : {
+        "inputrc" : ".inputrc"
+    },
+    "test" : {
+        "testrc" : ".testrc"
+    }
+
+}

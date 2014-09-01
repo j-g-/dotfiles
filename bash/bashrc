@@ -20,7 +20,7 @@ fi
 # My PS1
 source .bash_colors
 PS1=""
-PS1="${PS1}${PCGreen}╭─| ${PCWhite}D: ${PCGreen}\w ${PCNone}${PCGreen} | ${PRVAqua}${PCDark} #:\# j:\j ${PCNone}${PCGreen} | ${PRVDark}${PCAqua} dev:\l ${PCNone}${PCGreen} |-\r\n"
+PS1="${PS1}${PCGreen}╭─| ${PCWhite}D: ${PCGreen}\w ${PCNone}${PCGreen} | ${PRVAqua}${PCDark} #\# j:\j ${PCNone}${PCGreen} | ${PRVDark}${PCAqua} dev:\l ${PCNone}${PCGreen} |-\r\n"
 PS1="${PS1}${PCGreen}╰─> ${PCYellow}\A ${PCBlue}\u${PCWhite}@${PCRed}\h ${PCNone}\\$ "
 export  PS1
 
@@ -40,3 +40,6 @@ SCRIPTS_PATH="${HOME}/scripts"
 export PATH="${SCRIPTS_PATH}:${PATH}"
 set -o vi
 [ -e "${SCRIPTS_PATH}/ShellInfo" ] && source "${SCRIPTS_PATH}/ShellInfo"
+
+# source aliases
+[ -e ~/.bash_aliases ] && . ~/.bash_aliases

@@ -20,8 +20,8 @@ fi
 # My PS1
 source .bash_colors
 PS1=""
-PS1="${PS1}${PCGreen}╭─| ${PCWhite}D: ${PCGreen}\w ${PCNone}${PCGreen} | ${PRVAqua}${PCDark} #\# j:\j ${PCNone}${PCGreen} | ${PRVDark}${PCAqua} dev:\l ${PCNone}${PCGreen} |-\r\n"
-PS1="${PS1}${PCGreen}╰─> ${PCYellow}\A ${PCBlue}\u${PCWhite}@${PCRed}\h ${PCNone}\\$ "
+PS1+="${PCGreen}╭─| ${PCWhite}D: ${PCGreen}\w ${PCNone}${PCGreen} | ${PRVAqua}${PCDark} #\# j:\j r:\$? ${PCNone}${PCGreen} | ${PRVDark}${PCAqua} dev:\l ${PCNone}${PCGreen} |-\r\n"
+PS1+="${PCGreen}╰─> ${PCYellow}\A ${PCBlue}\u${PCWhite}@${PCRed}\h ${PCNone}\\$ "
 export  PS1
 
 # Man colors

@@ -1,4 +1,5 @@
 #!/bin/sh
+source ~/.bash_colors
 BLIST="${PWD}/bundle-list.txt"
 
 # Checking for list of bundles url to exist
@@ -8,23 +9,25 @@ BLIST="${PWD}/bundle-list.txt"
 # This functions adds the url of the origin of a bundle git repository
 add_tolist(){ 
     #$1: repo_url $2: repo_dir
-    repo_url= $1 
-    repo_dir= $2 
-    echo ${repo_url }>> $BLIST && echo "Bundle ${repo_dir} wasn't in list" &&\
-        echo "  URL: ${repo_url} added!"
+    repo_url="${1}"
+    repo_dir="${2}"
+    echo -e "${CRed}>>>${CYellow} Bundle ${repo_dir} wasn't in list" 
+    echo -e "  URL: ${CGreen} ${repo_url} ${CNone} adding!"
+    echo "${repo_url}" >> $BLIST 
 }
 
 
 
-export n=1
+n=1
 for dir in ./*/ ; do 
-    echo " ($n) Updating bundle $dir"
+    echo -e "(${CGreen}${n}${CNone}) Updating bundle ${CAqua}$dir${CNone}"
     cd $dir ;
 
-    printf "\t>>> Running 'git fetch' in $PWD\n"
     ORIGIN_URL=$(git remote show origin | grep Fetch | cut -c 14-) 
-    echo "descargando desde $ORIGIN_URL"
-    git fetch &&  printf "\t>>> Fetch successful\n"
+    printf "${CRed}>>>${CNone} Running ${CGreen}'git fetch'${CNone} in $PWD\n"
+    printf "${CRed}>>>${CNone} descargando desde ${CAqua} ${ORIGIN_URL}${CNone}\n"
+    git fetch &&  printf "${CRed}>>> ${CGreen}Fetch successful${CNone}\n" &&\
+        git pull 
     cd .. ;
     n=$((n+1))
 

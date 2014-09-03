@@ -11,7 +11,7 @@ set foldmethod=indent
 set cc=79
 hi ColorColumn ctermbg=blue
 set modeline
-let mapleader="ç""
+let mapleader="ñ"
 set number
 set hlsearch
 set cursorline
@@ -72,7 +72,7 @@ syntax on
 "<<<
 
 "AutoClose plugin --->
-nmap <Leader>ñ <Plug>ToggleAutoCloseMappings"
+nmap <Leader>ac <Plug>ToggleAutoCloseMappings"
 "<<<
 
 "Git -->

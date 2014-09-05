@@ -283,7 +283,6 @@ def getArgs():
             help="Push changes in the repository repo to remote origin")
 
     args = parser.parse_args()
-    print(args)
 
     if  len(sys.argv) < 2:
         parser.print_help()

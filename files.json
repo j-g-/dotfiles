@@ -23,6 +23,9 @@
     "readline" : {
         "inputrc" : ".inputrc"
     },
+    "sakura" : {
+        "sakura.conf" : ".config/sakura/sakura.conf"
+    },
     "test" : {
         "testrc" : ".testrc"
     }

@@ -16,8 +16,10 @@ set number
 set hlsearch
 set cursorline
 set incsearch
-nnoremap <leader>t :tabnext<CR>
-nnoremap <leader>p :tabprevious<CR>
+nnoremap <leader>tn :tabnext<CR>
+nnoremap <leader>tc :tabnew<CR>
+nnoremap <leader>tp :tabprevious<CR>
+map <leader>pp :set paste<CR>"+p<ESC>:set nopaste<CR>
 "Toggle background font rendering style
 map <leader>bl :set background=light<CR>
 map <leader>bd :set background=dark<CR>

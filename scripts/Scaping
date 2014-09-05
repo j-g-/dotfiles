@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Scan ips used in the lan with ping 
+#   Scaping N_IPS [SUBNET_PREFIX]
+#   Scapint 100 127.0.0.
+
+DEFAULT_LAN='192.168.1.'
+#
+#$1 max LAN address 
+#$2 SUBNET (optional)
+[[ -n $2 ]] && DEFAULT_LAN=$2
+
+do_ping(){
+
+    # Send One packet this is LAN it *should be reliable*
+    ping -c 1 $DEFAULT_LAN$i &> /dev/null
+    # Check $? = 0, for a successfull ping
+    if  [[ $? -eq 0 ]];  then
+        printf "Adress \e[36m $DEFAULT_LAN$1\t\e[0mis \e[32m \tUP\e[0m\n";
+    else
+        printf "Adress \e[36m $DEFAULT_LAN$1\t\e[0mis \e[31m \tDOWN\e[0m\n"
+    fi
+
+}
+for (( i=1; i<=$1; i+=1 )); do
+    do_ping $i ;
+done

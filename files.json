@@ -26,6 +26,9 @@
     "sakura" : {
         "sakura.conf" : ".config/sakura/sakura.conf"
     },
+    "scripts" : {
+        "" : "scripts"
+    },
     "test" : {
         "testrc" : ".testrc"
     }

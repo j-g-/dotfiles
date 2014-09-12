@@ -9,7 +9,7 @@ set nocompatible
 set grepprg=grep\ -nH\ $*
 set foldmethod=indent
 set cc=79
-hi ColorColumn ctermbg=blue
+hi ColorColumn ctermbg=gray
 set modeline
 let mapleader="ñ"
 set number
@@ -23,7 +23,9 @@ map <leader>pp :set paste<CR>"+p<ESC>:set nopaste<CR>
 "Toggle background font rendering style
 map <leader>bl :set background=light<CR>
 map <leader>bd :set background=dark<CR>
-
+map <leader>qq :q!<CR> 
+map <leader>l :set list!<CR>
+set lcs=eol:$,tab:>-,trail:~,precedes:>,extends:\<
 "when mouse is present -->
 if has("mouse")
 	set mouse=a
@@ -63,10 +65,10 @@ setlocal omnifunc=javacomplete#SetSourcePath('$HOME/.java')
 setlocal completefunc=javacomplete#CompleteParamsInfo
 autocmd FileType java set omnifunc=javacomplete#Complete
 "inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
-inoremap <c-space> <c-x><c-o><c-p> 
 "other
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType cpp se omnifunc=omnicppcomplete#Complete
+inoremap <c-space> <c-x><c-o>
 "<<<
 
 "Highlighting -->
@@ -78,12 +80,18 @@ nmap <Leader>ac <Plug>ToggleAutoCloseMappings"
 "<<<
 
 "Git -->
-nnoremap <silent> <F4> :Gitv<CR>
+nnoremap <silent> <F4> <ESC>:Gitv<CR>
+nnoremap <silent> <F3> <ESC>:Gstatus<CR>
+nnoremap <silent> <F5> <ESC>:Gdiff<CR>
 "<<<
 
 " FuzzyFinder binds -->
 map <leader>ff :FufFile <cr>
 map <leader>fl :FufLine <cr>
 "<<<
+" Python helpers-->
+"autocmd FileType python set ts=4 sw et sts=2
+"<<<
+
 
 " vim:set et  sw=4 ts=4 sts=2 fdm=marker foldmarker=-->,<<<:

@@ -30,7 +30,8 @@
         "" : "scripts"
     },
     "test" : {
-        "testrc" : ".testrc"
+        "testrc" : ".testrc",
+        "test.alt" : ".test_dir/test.alt"
     }
 
 }

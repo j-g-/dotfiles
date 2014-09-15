@@ -124,8 +124,13 @@ class DotFile:
                 print("Correcting! making backup of found file ")
                 self.backup(file_name)
                 os.remove(dest)
+
             except FileNotFoundError as e:
                 print(CLS.tags["warn_fnoexist"] +  dest )
+                base_path = os.path.dirname(dest)
+                if not os.path.exists(base_path):
+                    os.makedirs(base_path)
+
             #Doing symlink
             print (CLS.tags["package"]+self.package_name + ">> symlinking "+
                     " source: " + CLS.green+source + CLS.none + 

@@ -16,7 +16,9 @@ import shutil
 import argparse
 import sys
 
-dotdir =  os.environ["HOME"] + "/.dotfiles"
+home_dir = os.environ["HOME"]
+dotdir =  os.path.join(home_dir,'.dotfiles')
+backup_dir =  os.path.join(home_dir ,'.dotfiles.backup')
 version = "0.1"
 
 #TODO use these:
@@ -63,7 +65,15 @@ class CLS:
     #def expand(self):
         #"""docstring for check"""
         
+class WrongSymlinkError(Exception):
+    """docstring for WrongSymlinkError"""
+    def __init__(self, bad_dest, file_in_home):
+        self.file_in_home = file_in_home
+        self.bad_dest = bad_dest
+    def __str__(self):
+        return repr(self.bad_dest),repr(self.file_in_home)
         
+
 class DotFile:
     """docstring for DotFile"""
     def __init__(self, package_name = "", paths = dict()):
@@ -78,16 +88,65 @@ class DotFile:
         """docstring for readPaths"""
         pass
 
+    def backup(self, file_name):
+        source, dest = self.expandLink(file_name)
+        if not os.path.exists(backup_dir):
+            os.mkdir(backup_dir)
+        backup_path=os.path.join(backup_dir,self.package_name,file_name)
+        os.makedirs(os.path.dirname(backup_path))
+        shutil.copyfile(dest,backup_path)
+
+
     def symlinkPaths(self):
         """docstring for symlinkPaths"""
-        for path in self.expanded_paths_dict:
-            #if os.access(home + path, os.F_OK)
-            src=path
-            dest=self.expanded_paths_dict[path]
+        paths_dict = self.paths_dict
+        (cols, rows) =  shutil.get_terminal_size()
+        print ( CLS.yellow + (cols * "-")+ CLS.none)
+        print (" Symlinking package: " + CLS.magenta + self.package_name + CLS.none)
+        print ( CLS.yellow + (cols * "-")+ CLS.none)
+        for file_name in paths_dict: 
+            source, dest = self.expandLink(file_name)
+            try:
+                if self.isLinked(file_name):
+                    print(CLS.tags["symlinked"] + CLS.green + dest + 
+                        CLS.none + " -> " + CLS.lightblue + source + CLS.none +
+                        " was symlinked")
+                    #Symlink done go to next
+                    continue
+            except WrongSymlinkError as e:
+                print(CLS.tags["warn_wrong_symlink"] + CLS.red +  dest + 
+                    CLS.none + " -> " + CLS.yellow + os.readlink(dest)+ CLS.none)
+                print("Correcting! delting link " + dest)
+                os.remove(dest)
+
+            except FileExistsError as e:
+                print(CLS.tags["warn_not_symlink"] + CLS.red +  dest + CLS.none) 
+                print("Correcting! making backup of found file ")
+                self.backup(file_name)
+                os.remove(dest)
+            except FileNotFoundError as e:
+                print(CLS.tags["warn_fnoexist"] +  dest )
+            #Doing symlink
             print (CLS.tags["package"]+self.package_name + ">> symlinking "+
-                    " src: " + CLS.green+src + CLS.none + 
+                    " source: " + CLS.green+source + CLS.none + 
                     " dest: " + CLS.lightblue+dest )
-            os.symlink(src,dest)
+            os.symlink(source,dest)
+
+
+    def isLinked(self, file_name):
+        source, dest = self.expandLink(file_name)
+        if os.path.exists(dest)  and os.path.exists(source):
+            if  os.path.islink(dest):
+                if  os.readlink(dest) == source :
+                    return True
+                else:
+                    raise WrongSymlinkError(dest, os.readlink(dest))
+            else:
+                raise FileExistsError(dest)
+
+        else:
+            raise FileNotFoundError(dest)
+
 
 
     def removePaths(self):
@@ -125,42 +184,41 @@ class DotFile:
                     CLS.none+" >> "+
                     CLS.lightblue + source + CLS.none)
 
-    def expandPaths(self, paths = dict()):
-        """" Expands paths, using local directories"""
-        expanded_paths = dict()
-        for f in paths:
-            file_in_repo = dotdir + "/" + self.package_name + "/" + f
-            file_in_home = os.environ['HOME'] + "/" + paths[f]
-            expanded_paths[file_in_repo] = file_in_home
+    def expandPaths(self, paths={}):
+        expanded_paths={}
+        for file_name in paths:
+            src, dest = self.expandLink(file_name)
+            expanded_paths[src]=dest
         return expanded_paths
+
+    def expandLink(self, file_name):
+        """ 
+        Expands a set of paths to symlink, 
+        returns file_in_repo, file_in_home
+        """
+        file_in_repo = os.path.join(dotdir,self.package_name,file_name)
+        file_in_home = os.path.join(home_dir,self.paths_dict[file_name])
+        return file_in_repo, file_in_home
     
     def testPaths(self):
         """Test if expanded paths are symlinked"""
-        paths_dict = self.expanded_paths_dict
+        paths_dict = self.paths_dict
         (cols, rows) =  shutil.get_terminal_size()
         print ( CLS.yellow + (cols * "-")+ CLS.none)
         print (" Test package: " + CLS.magenta + self.package_name + CLS.none)
         print ( CLS.yellow + (cols * "-")+ CLS.none)
-        for source in paths_dict: 
-            dest = paths_dict[source]
-            
-            if os.path.exists(dest)  and os.path.exists(source)  :
-                if  os.path.islink(dest):
-                    if  os.readlink(dest) == source :
-                        print(CLS.tags["symlinked"] +
-                                CLS.green + dest + 
-                                CLS.none + " -> " + 
-                                CLS.lightblue + source + CLS.none)
-                    else :
-                        print(CLS.tags["warn_wrong_symlink"] + 
-                                CLS.red +  dest + 
-                                CLS.none + " -> " + 
-                                CLS.yellow + os.readlink(dest)+ CLS.none)
-                else:
-                    print(CLS.tags["warn_not_symlink"] + 
-                            CLS.red +  dest + CLS.none) 
-
-            else:
+        for file_name in paths_dict: 
+            source, dest = self.expandLink(file_name)
+            try:
+                if self.isLinked(file_name):
+                    print(CLS.tags["symlinked"] + CLS.green + dest + 
+                        CLS.none + " -> " + CLS.lightblue + source + CLS.none)
+            except WrongSymlinkError as e:
+                print(CLS.tags["warn_wrong_symlink"] + CLS.red +  dest + 
+                    CLS.none + " -> " + CLS.yellow + os.readlink(dest)+ CLS.none)
+            except FileExistsError as e:
+                print(CLS.tags["warn_not_symlink"] + CLS.red +  dest + CLS.none) 
+            except FileNotFoundError as e:
                 print(CLS.tags["warn_fnoexist"] +  dest )
 
 def createDotfiles():
@@ -291,7 +349,7 @@ def getArgs():
         return args
     
 if __name__ == '__main__':
-    dot_files = createDotfiles();
+    dot_files = createDotfiles()
     args = getArgs()
     if args.show:
         checkDotfiles(args.packages)

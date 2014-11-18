@@ -93,8 +93,19 @@ class DotFile:
         if not os.path.exists(backup_dir):
             os.mkdir(backup_dir)
         backup_path=os.path.join(backup_dir,self.package_name,file_name)
+
         os.makedirs(os.path.dirname(backup_path))
-        shutil.copyfile(dest,backup_path)
+
+        if os.path.isdir(dest):
+            print("copying a dir")
+            print(dest)
+            print("to a dir")
+            print(backup_path)
+            #shutil.copytree()
+
+        else:
+            shutil.copyfile(dest,backup_path)
+
 
 
     def symlinkPaths(self):

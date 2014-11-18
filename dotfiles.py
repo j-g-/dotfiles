@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/bin/env python
 # Dotfiles symlinks handler script, with support for storing defined files and
 # symlink paths in a file.json file, each directory represents a package
 # paths are expanded as /home-dir/dotdir/package/file and a simlink is placed
@@ -20,6 +20,8 @@ home_dir = os.environ["HOME"]
 dotdir =  os.path.join(home_dir,'.dotfiles')
 backup_dir =  os.path.join(home_dir ,'.dotfiles.backup')
 version = "0.1"
+rows, cols = os.popen('stty size', 'r').read().split()
+rows, cols = int(rows) , int(cols)
 
 #TODO use these:
 #dot_local_repo =  os.environ["HOME"] + "/.dotfiles/repo/"
@@ -65,14 +67,27 @@ class CLS:
     #def expand(self):
         #"""docstring for check"""
         
-class WrongSymlinkError(Exception):
+class WrongSymlinkError(OSError):
     """docstring for WrongSymlinkError"""
     def __init__(self, bad_dest, file_in_home):
         self.file_in_home = file_in_home
         self.bad_dest = bad_dest
     def __str__(self):
         return repr(self.bad_dest),repr(self.file_in_home)
+
+class DotFileExistsError(OSError):
+    """ Error when file  already exists """
+    def __init__(self, dest=u""):
+        self.dest = dest
+    def __str__(self):
+        return repr(self.dest)
         
+class DotFileNotFoundError(OSError):
+    """ Error when file doesn't exists """
+    def __init__(self, dest=u""):
+        self.dest = dest
+    def __str__(self):
+        return repr(self.dest)
 
 class DotFile:
     """docstring for DotFile"""
@@ -100,7 +115,6 @@ class DotFile:
     def symlinkPaths(self):
         """docstring for symlinkPaths"""
         paths_dict = self.paths_dict
-        (cols, rows) =  shutil.get_terminal_size()
         print ( CLS.yellow + (cols * "-")+ CLS.none)
         print (" Symlinking package: " + CLS.magenta + self.package_name + CLS.none)
         print ( CLS.yellow + (cols * "-")+ CLS.none)
@@ -119,13 +133,13 @@ class DotFile:
                 print("Correcting! delting link " + dest)
                 os.remove(dest)
 
-            except FileExistsError as e:
+            except DotFileExistsError as e:
                 print(CLS.tags["warn_not_symlink"] + CLS.red +  dest + CLS.none) 
                 print("Correcting! making backup of found file ")
                 self.backup(file_name)
                 os.remove(dest)
 
-            except FileNotFoundError as e:
+            except DotFileNotFoundError as e:
                 print(CLS.tags["warn_fnoexist"] +  dest )
                 base_path = os.path.dirname(dest)
                 if not os.path.exists(base_path):
@@ -147,10 +161,10 @@ class DotFile:
                 else:
                     raise WrongSymlinkError(dest, os.readlink(dest))
             else:
-                raise FileExistsError(dest)
+                raise DotFileExistsError(dest)
 
         else:
-            raise FileNotFoundError(dest)
+            raise DotFileNotFoundError(dest)
 
 
 
@@ -168,7 +182,6 @@ class DotFile:
         for the symlink, the paths are expanded by default
         """
 
-        (cols, rows) =  shutil.get_terminal_size()
         print( CLS.lightblue + (cols * "-")+ CLS.none)
         print(" Files for package: "+ CLS.green + self.package_name + CLS.none)
         print( CLS.lightblue + (cols * "-")+ CLS.none)
@@ -208,7 +221,6 @@ class DotFile:
     def testPaths(self):
         """Test if expanded paths are symlinked"""
         paths_dict = self.paths_dict
-        (cols, rows) =  shutil.get_terminal_size()
         print ( CLS.yellow + (cols * "-")+ CLS.none)
         print (" Test package: " + CLS.magenta + self.package_name + CLS.none)
         print ( CLS.yellow + (cols * "-")+ CLS.none)
@@ -221,10 +233,18 @@ class DotFile:
             except WrongSymlinkError as e:
                 print(CLS.tags["warn_wrong_symlink"] + CLS.red +  dest + 
                     CLS.none + " -> " + CLS.yellow + os.readlink(dest)+ CLS.none)
-            except FileExistsError as e:
+            except DotFileExistsError as e:
                 print(CLS.tags["warn_not_symlink"] + CLS.red +  dest + CLS.none) 
-            except FileNotFoundError as e:
+            except DotFileNotFoundError as e:
                 print(CLS.tags["warn_fnoexist"] +  dest )
+
+def print_filled(text=""):
+    fill = int( (int(cols) - len(text))/2 )
+    fill2 = (int(cols) - len(text)) - fill
+    print ( CLS.bgreen+fill*" " + CLS.dark+text + 
+            CLS.bgreen+fill2*" "  +  CLS.none)
+    
+    
 
 def createDotfiles():
     """docstring for createDotfiles"""
@@ -257,14 +277,9 @@ def disableDotfile():
     pass
 
 def checkDotfiles(packages=None):
-    (cols, rows) =  shutil.get_terminal_size()
-    text = " Printing configuration files for packages in files.json " 
-    fill = int( (cols - len(text))/2 )
-    fill2 = (cols - len(text)) - fill
-    print ( CLS.bgreen+fill*" " + CLS.dark+text + 
-            CLS.bgreen+fill2*" "  +  CLS.none)
+    print_filled(" Printing configuration files for packages in files.json " )
     #Printing
-    if len(packages)== 0 or packages == ['all']:
+    if len(packages) == 0 or packages == ['all']:
         for package in dot_files :
             dot_files[package].printPaths()
     else :
@@ -272,23 +287,13 @@ def checkDotfiles(packages=None):
             dot_files[package].printPaths()
 
 def listDotfiles():
-    (cols, rows) =  shutil.get_terminal_size()
-    text = " Printing packages available in files.json " 
-    fill = int( (cols - len(text))/2 )
-    fill2 = (cols - len(text)) - fill
-    print ( CLS.bgreen+fill*" " + CLS.dark+text + 
-            CLS.bgreen+fill2*" "  +  CLS.none)
+    print_filled(" Printing packages available in files.json " )
     #Printing
     for package in dot_files :
        print(CLS.tags["package"]+ package)
 
 def testDotfiles(packages=None): 
-    (cols, rows) =  shutil.get_terminal_size()
-    text = " Testing configuration files for packages in files.json " 
-    fill = int( (cols - len(text))/2 )
-    fill2 = (cols - len(text)) - fill
-    print ( CLS.byellow+fill*" " + CLS.dark+text +
-            CLS.byellow+fill2*" "  +  CLS.none)
+    print_filled(" Testing configuration files for packages in files.json " )
     #Testing
     if len(packages) == 0 or packages == ['all']:
         for package in dot_files :

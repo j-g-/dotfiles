@@ -9,7 +9,7 @@ set nocompatible
 set grepprg=grep\ -nH\ $*
 set foldmethod=indent
 set cc=79
-hi ColorColumn ctermbg=gray
+hi ColorColumn ctermbg=blue
 set modeline
 let mapleader="ñ"
 set number
@@ -24,8 +24,18 @@ map <leader>pp :set paste<CR>"+p<ESC>:set nopaste<CR>
 map <leader>bl :set background=light<CR>
 map <leader>bd :set background=dark<CR>
 map <leader>qq :q!<CR> 
+map <leader>qa :qa!<CR> 
 map <leader>l :set list!<CR>
 set lcs=eol:$,tab:>-,trail:~,precedes:>,extends:\<
+set laststatus=2
+function! SL(function)
+    if exists('*'.a:function)
+        return call(a:function,[])
+    else
+        return ''
+    endif
+endfunction
+set statusline=[%n]\ %<%.99f\ %h%w%m%r%{SL('CapsLockStatusline')}%y%{SL('fugitive#statusline')}%#ErrorMsg#%{SL('SyntasticStatuslineFlag')}%*%=%-14.(%l,%c%V%)\ %P
 "when mouse is present -->
 if has("mouse")
 	set mouse=a
@@ -90,7 +100,11 @@ map <leader>ff :FufFile <cr>
 map <leader>fl :FufLine <cr>
 "<<<
 " Python helpers-->
-"autocmd FileType python set ts=4 sw et sts=2
+autocmd FileType python set ts=4 sw et sts=2
+"<<<
+
+" C helpers-->
+autocmd FileType c set ts=8 sw=8 noet sts=4
 "<<<
 
 

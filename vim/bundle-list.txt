@@ -15,3 +15,7 @@ https://github.com/garbas/vim-snipmate.git
 https://github.com/honza/vim-snippets.git
 https://github.com/tpope/vim-surround.git
 https://github.com/vim-scripts/Vim-EPUB.git
+https://github.com/tpope/vim-capslock
+git://github.com/tpope/vim-capslock.git
+https://github.com/tpope/vim-eunuch.git
+https://github.com/vim-scripts/Align.git

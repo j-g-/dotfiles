@@ -16,6 +16,7 @@ set number
 set hlsearch
 set cursorline
 set incsearch
+set wildmenu
 nnoremap <leader>tn :tabnext<CR>
 nnoremap <leader>tc :tabnew<CR>
 nnoremap <leader>tp :tabprevious<CR>
@@ -74,7 +75,7 @@ setlocal omnifunc=javacomplete#AddSourcePath('$HOME/.java')
 setlocal omnifunc=javacomplete#SetSourcePath('$HOME/.java')
 setlocal completefunc=javacomplete#CompleteParamsInfo
 autocmd FileType java set omnifunc=javacomplete#Complete
-"inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P>
+autocmd FileType java imap . .<c-x><c-u><c-p>
 "other
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType cpp se omnifunc=omnicppcomplete#Complete

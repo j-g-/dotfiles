@@ -6,5 +6,10 @@ alias vbrdp='VBoxVRDP'
 alias Sm='sudo systemctl suspend'
 alias vmlist='VBoxManage list vms'
 alias emfetch='sudo tail -f /var/log/emerge-fetch.log'
+alias eworld='sudo emerge -avuDN --with-bdeps=y --backtrack=7 @world'
 alias su='sudo su'
+grep_ebuilds (){
+    source /etc/portage/make.conf
+    find ${PORTDIR} -name *.ebuild -exec grep --color=always -inH  $1  {} \;
+}
 # vim:set ft=sh :

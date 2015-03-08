@@ -19,3 +19,4 @@ https://github.com/tpope/vim-capslock
 git://github.com/tpope/vim-capslock.git
 https://github.com/tpope/vim-eunuch.git
 https://github.com/vim-scripts/Align.git
+https://github.com/tpope/vim-pathogen.git

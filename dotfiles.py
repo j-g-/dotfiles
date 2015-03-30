@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/env python3
 # Dotfiles symlinks handler script, with support for storing defined files and
 # symlink paths in a file.json file, each directory represents a package
 # paths are expanded as /home-dir/dotdir/package/file and a simlink is placed

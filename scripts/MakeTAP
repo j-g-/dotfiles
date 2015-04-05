@@ -1,0 +1,7 @@
+#!/bin/sh
+tap_iface="$1"
+br_iface="br-$(hostname)0"
+user="$2"
+ip tuntap add dev $tap_iface user $user mode tap
+brctl addif $br_iface $tap_iface
+ip l s dev $tap_iface  up

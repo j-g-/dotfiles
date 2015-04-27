@@ -1,0 +1,78 @@
+#!/bin/bash
+# Script for forking ebuild from main gentoo's tree
+# it works by creating a copy of a package in an user overlay
+
+#  saving package atom
+atom=$1
+
+function die {
+    echo $1
+    echo "Terminating."
+    exit 1
+}
+
+
+# Sourcing configuratin
+source /etc/portage/make.conf
+source ~/.fork_ebuild.conf
+
+# resolving atom to a path
+latest_ebuild=$(equery w $atom)
+
+# Checking for package already in 
+if [[ -z "${latest_ebuild##*$user_overlay*}" ]] ; then
+    echo "The ebuild $latest_ebuild"
+    echo "is already forked in your overlay"
+    exit 0
+fi
+
+
+echo "Forking $latest_ebuild"
+
+# Split into components
+IFS="/" read  category package file <<< "${latest_ebuild#$PORTDIR}"
+
+portage_pkg_dir="${PORTDIR}/${category}/${package}"
+portage_files_dir="${PORTDIR}/${category}/${package}/files"
+
+new_pkg_dir="${user_overlay}/${category}/${package}"
+new_ebuild_file="${new_pkg_dir}/${file}"
+new_files_dir="${new_pkg_dir}/files"
+
+# Cheking for package already in overlay
+if [[ ! -d $new_pkg_dir ]] ; then 
+    echo "Directory for package desn't already exist."
+    mkdir -p $new_pkg_dir || die "Couldn't create directory" 
+    echo "New directory: $new_pkg_dir"
+else
+    echo "Directory for package already exist."
+    echo "  $new_pkg_dir"
+fi
+
+# Cheking for ${FILESDIR}
+if [[ -d "$portage_files_dir" ]] ; then 
+    echo "Package has extra files needed for building"
+    cp -av $portage_files_dir "$new_pkg_dir/" || die "Couldn't copy directory $portage_files_dir" 
+    echo "Copied: $portage_pkg_dir"
+fi
+
+# Copying ebuild
+if [[ ! -f $new_ebuild_file ]] ; then 
+    echo "New ebuild: $new_ebuild_file"
+    cp $latest_ebuild $new_ebuild_file || die "Couldn't copy ebuild" 
+else
+    echo "Ebuild: $new_ebuild_file already forked"
+fi
+
+
+echo  "Forking successfull, changing directory and launching editor in 3 sec."
+sleep 3 
+
+# Editing ebuild
+if [[ ${EDITOR} ]] ; then
+    cd $new_pkg_dir
+    exec ${EDITOR} $file
+else
+    echo "There isn't an editor set in \$EDITOR"
+    exit 1
+fi

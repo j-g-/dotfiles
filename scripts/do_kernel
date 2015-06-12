@@ -1,0 +1,69 @@
+#!/bin/bash
+# My kernel upgrading cript.
+#   - builds linux kernel based on previous config or /proc/config.gz
+#   - generates initramfs with dracut for newly created kernel
+#   - generates config for grub or gummiboot (autodetected if installed)
+
+BOOTDIR="/boot"
+if [[ -z $( ls -A $BOOTDIR) ]] ; then
+    echo "mounting $BOOTDIR"
+    mount $BOOTDIR ||  echo "check your fstab entry for $BOOTDIR" ;
+else
+    echo "$BOOTDIR is not empty not mounting."
+fi
+
+SELECTED_KERNEL=$(readlink /usr/src/linux)
+KERNEL_SRC_DIR="/usr/src/${SELECTED_KERNEL}" 
+
+# Entering kernel source directory
+cd $KERNEL_SRC_DIR
+
+if [ ! -e $KERNEL_SRC_DIR/.config ]; then
+    make clean &&  make mrproper
+    zcat /proc/config.gz > ${KERNEL_SRC_DIR}/.config
+fi
+
+echo "Making Backup of kernel config"
+echo "File: $KERNEL_SRC_DIR/config-$(date).txt"
+cp .config ./config-$(date).txt
+
+# || echo "Invalid symlink, exiting" && exit 1
+
+source .config
+# Version string for kernel-* and initrd-* files, 
+# trim 'linux-' from $SELECTED_KERNEL
+KERNEL_VERSION_STRING=${SELECTED_KERNEL:6}${CONFIG_LOCALVERSION}
+
+echo "Regenerating config file 'make olddefconfig'"
+make olddefconfig
+
+echo "Building Kernel and installing modules"
+source /etc/portage/make.conf
+make $MAKEOPTS
+echo "Installing kernel image and modules "
+make install && make modules_install 
+echo "Building Package"
+make tarxz-pkg
+echo "Regenerating initramfs"
+dracut --kver ${KERNEL_VERSION_STRING}
+
+if [[ -x /usr/sbin/grub2-mkconfig ]]; then
+    echo "Generating boot configuration for grub"
+    echo "Command: grub2-mkconfig -o /boot/grub/grub.cfg"
+    grub2-mkconfig -o /boot/grub/grub.cfg
+fi
+if [[ -x /usr/bin/gummiboot ]]; then 
+    echo "Generating boot configuration for gummiboot"
+    echo "File: /boot/loader/entries/linux-${KERNEL_VERSION_STRING}.conf"
+    # Generate config for gummiboot
+    cat << EOF > /boot/loader/entries/linux-${KERNEL_VERSION_STRING}.conf 
+title      Linux ${KERNEL_VERSION_STRING}
+linux      /vmlinuz-${KERNEL_VERSION_STRING}
+initrd     /initramfs-${KERNEL_VERSION_STRING}.img
+options    root=/dev/sda2 rootflags=subvol=gentoo-root
+EOF
+
+fi
+
+echo "Done kernel  and configuration upgraded!"
+# vim:set ft=sh:

@@ -38,9 +38,22 @@ man() {
 	man "$@"
 }
 export PYTHONSTARTUP="$HOME/.pythonrc.py"
+
+# Path  settings 
 SCRIPTS_PATH="${HOME}/scripts"
+# Go? 
+GOPATH="${HOME}/go"
+if [[ -d ${GOPATH} ]] ; then 
+    PATH="${GOPATH}/bin:/usr/local/opt/go/libexec/bin:${PATH}";
+    export GOPATH
+fi
+
+# done
 export PATH="${SCRIPTS_PATH}:${PATH}"
+
+
 set -o vi
+
 [ -e "${SCRIPTS_PATH}/ShellInfo" ] && source "${SCRIPTS_PATH}/ShellInfo"
 
 # source aliases

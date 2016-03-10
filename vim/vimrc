@@ -71,14 +71,15 @@ imap <C-b> <C-x><C-o>
 "<<<
 
 "java -->
-setlocal omnifunc=javacomplete#AddSourcePath('$HOME/.java')
-setlocal omnifunc=javacomplete#SetSourcePath('$HOME/.java')
-setlocal completefunc=javacomplete#CompleteParamsInfo
+autocmd FileType java setlocal omnifunc=javacomplete#AddSourcePath('$HOME/.java')
+autocmd FileType java setlocal omnifunc=javacomplete#SetSourcePath('$HOME/.java')
+autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
 autocmd FileType java set omnifunc=javacomplete#Complete
 autocmd FileType java imap . .<c-x><c-u><c-p>
 "other
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType cpp se omnifunc=omnicppcomplete#Complete
+
 inoremap <c-space> <c-x><c-o>
 "<<<
 
@@ -102,6 +103,15 @@ map <leader>fl :FufLine <cr>
 "<<<
 " Python helpers-->
 autocmd FileType python set ts=4 sw et sts=2
+if has('python')
+    py << EOF
+import os.path
+import sys
+import vim
+sys.path.insert(0, os.path.join(os.path.expanduser('~'), '.cache/fakegir/'))
+EOF
+endif
+
 "<<<
 
 " C helpers-->

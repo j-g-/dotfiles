@@ -2,14 +2,34 @@ alias dia="dia --integrated"
 alias vbox='VirtualBox'
 alias vbmanage='VBoxManage'
 alias vbrdp='VBoxVRDP'
+alias info="info --vi-keys"
 #alias Sm='echo mem | sudo tee /sys/power/state'
 alias Sm='sudo systemctl suspend'
 alias vmlist='VBoxManage list vms'
 alias emfetch='sudo tail -f /var/log/emerge-fetch.log'
-alias eworld='sudo emerge -avuDN --with-bdeps=y --backtrack=7 @world'
+alias eworld='sudo emerge -avuDN --with-bdeps=y --backtrack=30 @world'
 alias su='sudo su'
+
+# Gentoo
+alias ebuild='sudo -u portage ebuild'
+alias suportage="sudo -u portage /bin/bash"
+
+hman(){
+    local man_args=$@
+    man -Thtml $man_args > /tmp/man.html
+    firefox /tmp/man.html
+}
+eview(){
+    view $(equery w $1)
+}
+mkcd(){
+    mkdir $1 && cd $1
+
+}
 grep_ebuilds (){
     source /etc/portage/make.conf
     find ${PORTDIR} -name *.ebuild -exec grep --color=always -inH  $1  {} \;
 }
+alias esync="sudo emerge --sync && eix-update"
+
 # vim:set ft=sh :

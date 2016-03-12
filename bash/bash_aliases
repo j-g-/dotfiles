@@ -11,7 +11,6 @@ alias eworld='sudo emerge -avuDN --with-bdeps=y --backtrack=30 @world'
 alias su='sudo su'
 
 # Gentoo
-alias ebuild='sudo -u portage ebuild'
 alias suportage="sudo -u portage /bin/bash"
 
 hman(){
@@ -31,5 +30,12 @@ grep_ebuilds (){
     find ${PORTDIR} -name *.ebuild -exec grep --color=always -inH  $1  {} \;
 }
 alias esync="sudo emerge --sync && eix-update"
+
+function ebuild (){
+    export PKGDIR="${HOME}/pkg/"
+    export PORTAGE_TMPDIR="${HOME}/portage-builds/"
+    /usr/bin/ebuild $@
+}
+
 
 # vim:set ft=sh :

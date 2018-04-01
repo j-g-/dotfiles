@@ -44,10 +44,5 @@ function ebuild (){
     /usr/bin/ebuild $@
 }
 
-ipczip(){
-    $1 #directory
-    zip -r "[IPC1_B]$1.zip" $1/
-
-}
 
 # vim:set ft=sh :

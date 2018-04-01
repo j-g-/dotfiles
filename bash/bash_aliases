@@ -19,7 +19,14 @@ hman(){
     firefox /tmp/man.html
 }
 eview(){
-    view $(equery w $1)
+    local ebuild_file=$(equery w $1)
+    echo "Full path: " $ebuild_file
+    local ebuild_dir=${ebuild_file%/*}
+    ebuild_file=${ebuild_file##*/}
+    echo "Directory: " $ebuild_dir
+    echo "File name: " $ebuild_file
+    cd $ebuild_dir
+    view $ebuild_file
 }
 mkcd(){
     mkdir $1 && cd $1
@@ -37,5 +44,10 @@ function ebuild (){
     /usr/bin/ebuild $@
 }
 
+ipczip(){
+    $1 #directory
+    zip -r "[IPC1_B]$1.zip" $1/
+
+}
 
 # vim:set ft=sh :

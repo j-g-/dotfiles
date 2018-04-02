@@ -37,11 +37,15 @@ function! SL(function)
     endif
 endfunction
 set statusline=[%n]\ %<%.99f\ %h%w%m%r%{SL('CapsLockStatusline')}%y%{SL('fugitive#statusline')}%#ErrorMsg#%{SL('SyntasticStatuslineFlag')}%*%=%-14.(%l,%c%V%)\ %P
-"when mouse is present -->
-if has("mouse")
-	set mouse=a
-endif
 "<<<
+
+" Mouse options -->
+if has("mouse")
+    set mouse=a
+    if &term ==# "screen"
+        set ttymouse=sgr
+    endif
+endif
 "<<<
 
 "Latex suite opts -->

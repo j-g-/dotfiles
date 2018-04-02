@@ -8,6 +8,8 @@ alias Sm='sudo systemctl suspend'
 alias vmlist='VBoxManage list vms'
 alias emfetch='sudo tail -f /var/log/emerge-fetch.log'
 alias eworld='sudo emerge -avuDN --with-bdeps=y --backtrack=30 @world'
+alias tmux-j='/usr/bin/tmux a -d  -t J'
+alias tmux-irc='/usr/bin/tmux a -d -t IRC'
 alias su='sudo su'
 
 # Gentoo

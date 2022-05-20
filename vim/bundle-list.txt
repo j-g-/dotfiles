@@ -14,7 +14,6 @@ https://github.com/tpope/vim-fugitive.git
 https://github.com/garbas/vim-snipmate.git
 https://github.com/honza/vim-snippets.git
 https://github.com/tpope/vim-surround.git
-https://github.com/vim-scripts/Vim-EPUB.git
 https://github.com/tpope/vim-capslock
 git://github.com/tpope/vim-capslock.git
 https://github.com/tpope/vim-eunuch.git
@@ -22,3 +21,5 @@ https://github.com/vim-scripts/Align.git
 https://github.com/tpope/vim-pathogen.git
 https://github.com/justmao945/vim-clang.git
 https://github.com/fatih/vim-go.git
+https://github.com/davidhalter/jedi-vim
+https://github.com/rust-lang/rust.vim

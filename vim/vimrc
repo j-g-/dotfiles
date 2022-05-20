@@ -1,4 +1,5 @@
 "General opts -->
+let g:pymode_python = 'python3'
 filetype plugin on
 filetype indent on
 execute pathogen#infect()
@@ -11,7 +12,7 @@ set foldmethod=indent
 set cc=79
 hi ColorColumn ctermbg=blue
 set modeline
-let mapleader="ñ"
+let mapleader="\\"
 set number
 set hlsearch
 set cursorline
@@ -81,7 +82,6 @@ autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
 autocmd FileType java set omnifunc=javacomplete#Complete
 autocmd FileType java imap . .<c-x><c-u><c-p>
 "other
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType cpp se omnifunc=omnicppcomplete#Complete
 
 inoremap <c-space> <c-x><c-o>
@@ -107,14 +107,16 @@ map <leader>fl :FufLine <cr>
 "<<<
 " Python helpers-->
 autocmd FileType python set ts=4 sw et sts=2
-if has('python')
-    py << EOF
-import os.path
-import sys
-import vim
-sys.path.insert(0, os.path.join(os.path.expanduser('~'), '.cache/fakegir/'))
-EOF
-endif
+"if has('python')
+"    py << EOF
+"import os.path
+"import sys
+"import vim
+"sys.path.insert(0, os.path.join(os.path.expanduser('~'), '.cache/fakegir/'))
+"EOF
+"endif
+let g:jedi#force_py_version=3
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 "<<<
 

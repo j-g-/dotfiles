@@ -46,5 +46,9 @@ function ebuild (){
     /usr/bin/ebuild $@
 }
 
+function inkbuild () {
+    cmake .. -DCMAKE_INSTALL_PREFIX=${PWD}/local-install/ -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+    make && make install
+}
 
 # vim:set ft=sh :

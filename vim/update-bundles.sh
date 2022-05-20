@@ -3,7 +3,7 @@ source ~/.bash_colors
 BLIST="${PWD}/bundle-list.txt"
 
 # Checking for list of bundles url to exist
-[ -e $BLIST ] || touch $BLIST
+[[ -e $BLIST ]] || touch $BLIST
 REPO_REGEXP='\(https\|git\|ssh\):\/\/\(.*\)\/\(.*\)\/\(.*\)'
 declare -A repo_info
 
@@ -38,7 +38,7 @@ clone_repo(){
     ORIGIN_URL=$1 
     get_repo_info $ORIGIN_URL
     [ -d ./${repo_info[repo]} ] || mkdir ./${repo_info[repo]}
-    git clone  $ORIGIN_URL ${repo_info['repo']}
+    git clone --recursive $ORIGIN_URL ${repo_info['repo']}
 }
 
 upgrade(){
@@ -86,12 +86,12 @@ upgrade_repos(){
 }
 
 #ADD
-if [ $1 = "-a" ]; 
+if [[ $1 = "-a" ]]; 
 then
 #    get_repo_info $2
     add_tolist $2
     clone_repo $2
-elif [ $1 = "-u" ];
+elif [[ $1 = "-u" ]];
 then
     upgrade_repos;
 else

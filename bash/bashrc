@@ -14,6 +14,8 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
+[[ -e /etc/profile.d/bash_completion.sh ]] && source /etc/profile.d/bash_completion.sh
+
 [[ -e /etc/bash/bashrc ]] &&  source /etc/bash/bashrc
 # Put your fun stuff here.
 
@@ -41,11 +43,22 @@ export PYTHONSTARTUP="$HOME/.pythonrc.py"
 
 # Path  settings 
 SCRIPTS_PATH="${HOME}/scripts"
+
 # Go? 
 GOPATH="${HOME}/go"
 if [[ -d ${GOPATH} ]] ; then 
     PATH="${GOPATH}/bin:/usr/local/opt/go/libexec/bin:${PATH}";
     export GOPATH
+fi
+
+# Local python packages
+[[ -d "${HOME}/.local/lib/python3.8/site-packages" ]] && 
+    PYTHONPATH="${HOME}/.local/lib/python3.8/site-packages"
+
+# local bin dir 
+LOCALBIN_PATH="${HOME}/.local/bin"
+if [[ -d ${LOCALBIN_PATH} ]] ; then 
+    PATH="${LOCALBIN_PATH}:${PATH}";
 fi
 
 # done
@@ -58,3 +71,4 @@ set -o vi
 
 # source aliases
 [ -e ~/.bash_aliases ] && . ~/.bash_aliases
+export PATH=${PATH}:/home/jc/scripts:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:~/opt/bin/:~/opt/bin/
